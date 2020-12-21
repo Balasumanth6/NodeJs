@@ -119,7 +119,7 @@ dishRouter.route('/:dishId/comments')
 	Dishes.findById(req.params.dishId)
 	.then((dish) => {
 		if (dish != null) {
-			req.body.author = req.user._id
+			req.body.author = req.user._id;
             dish.comments.push(req.body);
             dish.save()
             .then((dish) => {

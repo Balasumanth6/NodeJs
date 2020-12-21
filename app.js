@@ -16,6 +16,7 @@ var dishRouter = require('./routes/dishRouter');
 const leadersRouter = require('./routes/leaderRouter.js');
 const promotionsRouter = require('./routes/promoRouter.js');
 const uploadRouter = require('./routes/uploadRouter.js');
+const favoritesRouter = require('./routes/favoritesRouter.js');
 
 const mongoose = require('mongoose');
 const url = config.mongoUrl;
@@ -24,6 +25,7 @@ const connect = mongoose.connect(url);
 const Dishes = require('./models/dishes');
 const Promos = require('./models/promos');
 const Leaders = require('./models/leaders');
+const Favorites = require('./models/favorites');
 
 connect.then((db) => {
 	console.log("connected to the server!");
@@ -62,6 +64,7 @@ app.use('/dishes', dishRouter);
 app.use('/promotions', promotionsRouter);
 app.use('/leaders', leadersRouter);
 app.use('/imageUpload', uploadRouter);
+app.use('/favorites', favoritesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
