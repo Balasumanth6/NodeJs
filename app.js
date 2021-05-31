@@ -3,35 +3,31 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 var passport = require('passport');
-
 var authenticate = require('./authenticate');
 var config = require('./config');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var dishRouter = require('./routes/dishRouter');
-const leadersRouter = require('./routes/leaderRouter.js');
-const promotionsRouter = require('./routes/promoRouter.js');
-const uploadRouter = require('./routes/uploadRouter.js');
-const favoritesRouter = require('./routes/favoritesRouter.js');
 
 const mongoose = require('mongoose');
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var dishRouter = require('./routes/dishRouter');
+var uploadRouter = require('./routes/uploadRouter.js');
+var leadersRouter = require('./routes/leaderRouter.js');
+var promotionsRouter = require('./routes/promoRouter.js');
+var favoritesRouter = require('./routes/favoritesRouter.js');
 
 const Dishes = require('./models/dishes');
 const Promos = require('./models/promos');
 const Leaders = require('./models/leaders');
 const Favorites = require('./models/favorites');
 
-connect.then((db) => {
-	console.log("connected to the server!");
-},(err) => {
-	console.log(err);
-})
+connect.then((db) => { console.log("connected to the server!"); },(err) => { console.log(err); })
 
 var app = express();
 
@@ -51,9 +47,10 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser('12345-67890-09876-54321'));
+// app.use(cookieParser('12345-67890-09876-54321')); //see node-express folder for cookies
 
 app.use(passport.initialize());
+// app.use(passport.sesion());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -68,18 +65,18 @@ app.use('/favorites', favoritesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;

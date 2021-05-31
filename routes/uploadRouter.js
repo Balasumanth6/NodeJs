@@ -5,21 +5,21 @@ const multer = require('multer');
 const cors = require('./cors');
 
 const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, 'public/images');
+	destination: (req, file, callback) => {
+		callback(null, 'public/images');
 	},
 
-	filename: (req, file, cb) => {
-		cb(null, file.originalname)
+	filename: (req, file, callback) => {
+		callback(null, file.originalname)
 	} 
 });
 
-const imageFileFilter = (req, file, cb) => {
+const imageFileFilter = (req, file, callback) => {
 	if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-		return cb(new Error("you can upload only image files!"), false);
+		return callback(new Error("you can upload only image files!"), false);
 	}
 	else {
-		cb(null, true);
+		callback(null, true);
 	}
 };
 
@@ -33,7 +33,7 @@ uploadRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => {
 	res.sendStatus(200);
 })
-.get(cors.cors, authenticate.verifyUser, (req, res, next) => {authenticate.verifyAdmin(req, res, next)}, 
+.get(cors.cors, authenticate.verifyUser, (req, res, next) => authenticate.verifyAdmin(req, res, next), 
 	(req, res, next) => {
 		res.statusCode = 403;
 		res.end('GET operation not supported on /imageUpload');
@@ -41,7 +41,7 @@ uploadRouter.route('/')
 .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {authenticate.verifyAdmin(req, res, next)}, 
 	(req, res, next) => {
 		res.statusCode = 403;
-		res.end('PUT operation not supported on /dishes');
+		res.end('PUT operation not supported on /imageUpload');
 })
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {authenticate.verifyAdmin(req, res, next)}, 
 	upload.single('imageFile'), (req, res) => {
@@ -52,6 +52,6 @@ uploadRouter.route('/')
 .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {authenticate.verifyAdmin(req, res, next)}, 
 	(req, res, next) => {
 		res.statusCode = 403;
-		res.end('PUT operation not supported on /dishes');
+		res.end('DELETE operation not supported on /imageUpload');
 })
 module.exports = uploadRouter;

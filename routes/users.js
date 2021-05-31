@@ -24,7 +24,7 @@ router.get('/', cors.corsWithOptions, authenticate.verifyUser, (req, res, next) 
   });
 });
 
-router.post('/signup', cors.corsWithOptions, function (req, res, next) {
+router.post('/signup', cors.corsWithOptions, (req, res, next) => {
 	User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
 
 		if (err) {
@@ -40,14 +40,12 @@ router.post('/signup', cors.corsWithOptions, function (req, res, next) {
 				user.lastname = req.body.lastname
 			}
 			user.save((err, user) => {
-
 				if (err) {
 					res.statusCode = 500;
 					res.setHeader('Content-Type', 'application/json');
 					res.json({err: err});
 					return;
 				}
-
 				passport.authenticate('local')(req, res, () => {
 					res.statusCode = 200;
 					res.setHeader('Content-Type', 'application/json');
@@ -111,12 +109,12 @@ router.post('/login', cors.corsWithOptions, passport.authenticate('local'), (req
 	// }
 });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', (req, res) => {
 
 	if (req.session) {
 		req.session.destroy();
 		res.clearCookie('session-id');
-		res.redirect('/');
+		res.redirect('/'); //to Home page
 	}
 	else {
 		var err = new Error('You are not logged in!');

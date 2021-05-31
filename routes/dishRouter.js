@@ -10,6 +10,8 @@ const dishRouter = express.Router();
 
 dishRouter.use(bodyParser.json());
 
+
+// /dishes
 dishRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => {
 	res.sendStatus(200);
@@ -17,7 +19,7 @@ dishRouter.route('/')
 .get(cors.cors, (req, res, next) => {
 	console.log(req.user);
 	Dishes.find({})
-	.populate('comments.author')
+	// .populate('comments.author')
 	.then((dishes) => {
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'application/json');
@@ -51,7 +53,7 @@ dishRouter.route('/')
 
 
 
-//
+// /dishes/:dishId
 dishRouter.route('/:dishId')
 .options(cors.corsWithOptions, (req, res) => {
 	res.sendStatus(200);
@@ -92,8 +94,7 @@ dishRouter.route('/:dishId')
 });
 
 
-//Comments
-
+// /dishes/:dishId/comments
 dishRouter.route('/:dishId/comments')
 .options(cors.corsWithOptions, (req, res) => {
 	res.sendStatus(200);
@@ -169,7 +170,7 @@ dishRouter.route('/:dishId/comments')
 
 
 
-//
+// /dishes/:dishId/comments/:commentId
 dishRouter.route('/:dishId/comments/:commentId')
 .options(cors.corsWithOptions, (req, res) => {
 	res.sendStatus(200);
